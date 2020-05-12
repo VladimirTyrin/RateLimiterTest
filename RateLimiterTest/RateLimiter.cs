@@ -54,6 +54,17 @@ namespace RateLimiterTest
                     throw new ArgumentException($"Count for interval {interval} is negative: {count}");
                 }
             }
+
+            var orderedByInterval = restrictions
+                .OrderBy(r => r.interval)
+                .ToArray();
+            for (var i = 0; i < orderedByInterval.Length - 1; ++i)
+            {
+                if (orderedByInterval[i].count > orderedByInterval[i + 1].count)
+                {
+                    throw new ArgumentException($"Limit for interval {orderedByInterval[i].interval} is greater than for {orderedByInterval[i + 1].interval}");
+                }
+            }
         }
 
         /// <summary>
